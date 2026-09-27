@@ -202,7 +202,6 @@
             color: #7f8c8d;
         }
 
-        /* 结束结算画面 */
         .result-screen {
             display: none;
         }
@@ -229,7 +228,6 @@
         </div>
 
         <div class="img-container">
-            <!-- 预设使用卡通风图片的外部在线示范链接，可替换为本地路径或图片链接 -->
             <img id="game-img" src="" alt="提示图片">
         </div>
 
@@ -238,9 +236,7 @@
             <div class="clue-text" id="clue-text">--</div>
         </div>
 
-        <div class="inputs-container" id="inputs-container">
-            <!-- 动态生成字母输入框 -->
-        </div>
+        <div class="inputs-container" id="inputs-container"></div>
 
         <div class="controls">
             <button class="btn-submit" id="submit-btn" onclick="checkAnswer()">检查答案</button>
@@ -259,43 +255,41 @@
 </div>
 
 <script>
-    // 游戏题目数据
     const questions = [
         {
             word: "FRIDGE",
             clue: "The thing that keeps the food fresh.",
-            // 采用卡通风风格图片在线资源示意
-            img: "https://images.unsplash.com/photo-1584992236310-6edddc08acff?w=600&auto=format&fit=crop&q=80"
+            img: "1790514657637.jpg"
         },
         {
             word: "PILOT",
             clue: "A person who flies an airplane in the sky.",
-            img: "https://images.unsplash.com/photo-1519074069444-1ba4e6d427d1?w=600&auto=format&fit=crop&q=80"
+            img: "1790514663718.jpg"
         },
         {
             word: "FARMER",
             clue: "A person who works on a farm to grow vegetables.",
-            img: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600&auto=format&fit=crop&q=80"
+            img: "1790514669380.jpg"
         },
         {
             word: "PHOTOGRAPHER",
             clue: "A person who takes photos with a camera.",
-            img: "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=600&auto=format&fit=crop&q=80"
+            img: "1790514675618.jpg"
         },
         {
             word: "FIREFIGHTER",
             clue: "A person who puts out fires and saves people.",
-            img: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop&q=80"
+            img: "1790515227197.jpg"
         },
         {
             word: "LIFEGUARD",
             clue: "A person who saves people at the beach or pool.",
-            img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=80"
+            img: "1790515234344.jpg"
         },
         {
             word: "DENTIST",
             clue: "A person who checks and fixes your teeth.",
-            img: "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=600&auto=format&fit=crop&q=80"
+            img: "1790515267057.jpg"
         }
     ];
 
@@ -311,7 +305,6 @@
     const currentIndexEl = document.getElementById('current-index');
     const totalCountEl = document.getElementById('total-count');
 
-    // 初始化游戏
     function initGame() {
         currentIndex = 0;
         totalCountEl.textContent = questions.length;
@@ -320,26 +313,21 @@
         loadQuestion();
     }
 
-    // 加载题目
     function loadQuestion() {
         const q = questions[currentIndex];
         
-        // 更新基本信息
         gameImg.src = q.img;
         clueText.textContent = q.clue;
         messageEl.textContent = "";
         messageEl.style.color = "";
         currentIndexEl.textContent = currentIndex + 1;
 
-        // 更新进度条
         const progressPercent = (currentIndex / questions.length) * 100;
         progressEl.style.width = `${progressPercent}%`;
 
-        // 显示检查答案按钮，隐藏下一题按钮
         submitBtn.style.display = 'inline-block';
         nextBtn.style.display = 'none';
 
-        // 生成填字框
         inputsContainer.innerHTML = "";
         for (let i = 0; i < q.word.length; i++) {
             const input = document.createElement('input');
@@ -348,14 +336,12 @@
             input.className = 'letter-input';
             input.dataset.index = i;
 
-            // 首字母固定提示，不让修改
             if (i === 0) {
                 input.value = q.word[0];
                 input.classList.add('given');
                 input.readOnly = true;
             }
 
-            // 键盘事件监听 (自动跳格与回退)
             input.addEventListener('input', handleInput);
             input.addEventListener('keydown', handleKeydown);
 
@@ -363,7 +349,6 @@
         }
     }
 
-    // 处理字母输入与自动跳格
     function handleInput(e) {
         const input = e.target;
         const val = input.value.toUpperCase();
@@ -374,7 +359,6 @@
         }
     }
 
-    // 处理退格键(Backspace)
     function handleKeydown(e) {
         const input = e.target;
         if (e.key === 'Backspace' && !input.value && input.previousElementSibling) {
@@ -386,7 +370,6 @@
         }
     }
 
-    // 检查答案
     function checkAnswer() {
         const q = questions[currentIndex];
         const inputs = inputsContainer.querySelectorAll('.letter-input');
@@ -397,7 +380,6 @@
         });
 
         if (userWord === q.word) {
-            // 正确处理
             inputs.forEach(input => {
                 input.classList.remove('wrong');
                 input.classList.add('correct');
@@ -410,7 +392,6 @@
             submitBtn.style.display = 'none';
             nextBtn.style.display = 'inline-block';
         } else {
-            // 错误处理
             inputs.forEach((input, index) => {
                 if (!input.readOnly) {
                     if (input.value.toUpperCase() !== q.word[index]) {
@@ -425,7 +406,6 @@
         }
     }
 
-    // 下一题
     function nextQuestion() {
         currentIndex++;
         if (currentIndex < questions.length) {
@@ -435,19 +415,16 @@
         }
     }
 
-    // 显示最终结果
     function showResult() {
         progressEl.style.width = `100%`;
         document.getElementById('quiz-screen').style.display = 'none';
         document.getElementById('result-screen').style.display = 'block';
     }
 
-    // 重新开始游戏
     function restartGame() {
         initGame();
     }
 
-    // 页面加载完成后运行
     window.onload = initGame;
 </script>
 
